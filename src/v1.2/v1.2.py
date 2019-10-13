@@ -90,6 +90,7 @@ text = pygame.font.SysFont("Consolas",12)
 # Loop until the user clicks close button
 done = False
 ctrl = False
+alt = False
 background = None
 sticker = None
 placed = False
@@ -103,6 +104,7 @@ while not done:
     # write event handlers here
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #####----------[ Add the EDIT variable ]----------#####
             if messagebox.askokcancel("Exit","Do you want to quit Image Processor?"):
                 if messagebox.askyesno("Save","Do you want to save?"):
                     messagebox.showinfo("Save","Hit ctrl+s to save, then exit by hitting no save.")
@@ -110,13 +112,20 @@ while not done:
                     messagebox.showinfo("Thank you","Thank you for using Image Processor.")
                     done = True
         elif event.type == pygame.VIDEORESIZE:
+            # WindowResize event: Resizes the window to desired size
             size = [event.w,event.h]
             screen = pygame.display.set_mode((event.w,event.h),HWSURFACE|DOUBLEBUF|RESIZABLE)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RCTRL or event.key == pygame.K_LCTRL:
+                # Control Key held down
                 ctrl = True
+            elif event.key == pygame.K_RALT or event.key == pygame.K_LALT:
+                # Alt Key held down
+                alt = True
             elif event.key == pygame.K_s:
+                #####----------[ Need to update and also enable saving using a menu ]----------#####
                 if ctrl:
+                    ###-----{ Change the saving to use Pillow instead of the unreliable surface object of pygame }-----###
                     screen.fill((0,0,0))
                     render = text.render("Saving",False,(255,255,255))
                     screen.blit(render,(0,0))
@@ -134,6 +143,7 @@ while not done:
                         del save
                         break
             elif event.key == pygame.K_o:
+                #####----------[ Need to update and also enable opening using a menu ]----------#####
                 if ctrl:
                     screen.fill((0,0,0))
                     render = text.render("Opening background file...",False,(255,255,255))
@@ -149,6 +159,7 @@ while not done:
                     pygame.display.update()
                     time.sleep(1)
             elif event.key == pygame.K_i:
+                #####----------[ Need to update and also enable choosing using a menu ]----------#####
                 if ctrl:
                     screen.fill((0,0,0))
                     render = text.render("Opening sticker file...",False,(255,255,255))
@@ -160,48 +171,68 @@ while not done:
                     sticker = aspect_scale(sticker,stickersize)
                     placed = False
             elif event.key == pygame.K_h:
-                messagebox.showinfo("Help","Welcome to help. This is still a incomplete feature, and you are not a develoer, so you may not acess this function. P.S. Developer mode is not a feature yet.")
+                messagebox.showinfo("Help","Welcome to help. This feature not implemented yet.")
                 # ===============================================================================[Feature]==============================================================================================
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RCTRL or event.key == pygame.K_LCTRL:
+                # Control Key not held
                 ctrl = False
+            elif event.key == pygame.K_RALT or event.key == pygame.K_LALT:
+                # Alt Key not held
+                alt = False
         elif event.type == pygame.MOUSEMOTION:
+            # Update the mouse location
             mouse_pos = pygame.mouse.get_pos()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
+            if event.button == 1: # Left Click
+                #####----------[ Need to allow for clicking in the menu, add x,y coord check ]----------#####
+                # Places the sticker
                 placed = True
                 pos = mouse_pos
-            if event.button == 2:
+            if event.button == 2: # Middle Click
+                #####----------[ Need to also be able to use the menu for this ]----------#####
+                # Resets the sticker size
                 stickersize = [100,100]
                 sticker = pygame.image.load(stickerfilename)
                 sticker = aspect_scale(sticker,stickersize)
-            if event.button == 3:
+            if event.button == 3: # Right Click
+                #####----------[ Need to be able to use the menu for this as well ]----------#####
+                # Unplaces the sticker
                 placed = False
                 del pos
-            if event.button == 4:
+            if event.button == 4: # Scroll Up
+                #####----------[ Need to be able to do this in the menu ]----------#####
+                # Makes the sticker bigger
                 stickersize = [stickersize[0]+15,stickersize[1]+15]
                 sticker = pygame.image.load(stickerfilename)
                 sticker = aspect_scale(sticker,stickersize)
-            if event.button == 5:
+            if event.button == 5: # Scroll Down
+                #####----------[ Need to be able to do this in the menu ]----------#####
+                # Makes the sticker smaller
                 if stickersize[0] > 0:
                     stickersize = [stickersize[0]-15,stickersize[1]-15]
                     sticker = pygame.image.load(stickerfilename)
                     sticker = aspect_scale(sticker,stickersize)
     # write program logic here
+    ## Well... I don't really have any program "logic". Everything is triggered by an event. I'm triggered now XD
     
-    # clear the screen before drawing
+    # clear the screen before (re)drawing
     screen.fill(BLACK) 
     # write draw code here
     if background != None:
         screen.blit(background,(0,0))
     if sticker != None:
         if not placed:
+            #####----------[ Center the sticker on the mouse instead of having the top left corner ]----------#####
+            # Draw the sticker at the mouse's position
             screen.blit(sticker,mouse_pos)
         if placed:
+            ###-----{ Render the sticker same as above ^ }-----###
+            # Draw the sticker at the placed position
             screen.blit(sticker,pos)
-    # display what’s drawn. this might change.
+    # update the screen
     pygame.display.update()
-    # run at 20 fps
+    # run at 60 fps
     clock.tick(60)
  
 # close the window and quit

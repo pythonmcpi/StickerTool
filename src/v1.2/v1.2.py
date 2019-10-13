@@ -133,16 +133,23 @@ while not done:
                     pygame.display.update()
                     time.sleep(0.5)
                     while True:
-                        filename = filedialog.asksaveasfilename(initialdir = "%CD%",title = "Save your edited picture",filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("all files","*.*")))
-                        if filename == "":
+                        # Saves only with PNG files!
+                        savefilename = filedialog.asksaveasfilename(initialdir = "%CD%",title = "Save your edited picture",filetypes = (("png files","*.png"),("all files","*.*")))
+                        if savefilename == "":
                             break
                         else:
-                            filename = filename + ".jpg"
+                            savefilename = savefilename + ".PNG"
                         # Change this to use Pillow!
+                        '''
                         save = background
                         save.blit(sticker,pos)
-                        pygame.image.save(save,filename)
+                        pygame.image.save(save,savefilename)
                         del save
+                        '''
+                        save = Image.open(filename)
+                        stickerimg = Image.open(stickerfilename)
+                        save.paste(stickerimg,pos,stickerimg)
+                        save.save(savefilename,"PNG")
                         break
             elif event.key == pygame.K_o:
                 #####----------[ Need to update and also enable opening using a menu ]----------#####
@@ -163,12 +170,13 @@ while not done:
             elif event.key == pygame.K_i:
                 #####----------[ Need to update and also enable choosing using a menu ]----------#####
                 if ctrl:
+                    # Sticker files are now default to PNG (transparency!)
                     screen.fill((0,0,0))
                     render = text.render("Opening sticker file...",False,(255,255,255))
                     screen.blit(render,(250,250))
                     pygame.display.update()
                     time.sleep(0.5)
-                    stickerfilename = filedialog.askopenfilename(initialdir = "%CD%",title = "Open your sticker to use",filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("all files","*.*")))
+                    stickerfilename = filedialog.askopenfilename(initialdir = "%CD%",title = "Open your sticker to use",filetypes = (("png files","*.png"),("jpeg files","*.jpg"),("all files","*.*")))
                     sticker = pygame.image.load(stickerfilename)
                     sticker = aspect_scale(sticker,stickersize)
                     placed = False

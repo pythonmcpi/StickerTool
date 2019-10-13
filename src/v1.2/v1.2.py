@@ -126,6 +126,7 @@ while not done:
                 #####----------[ Need to update and also enable saving using a menu ]----------#####
                 if ctrl:
                     ###-----{ Change the saving to use Pillow instead of the unreliable surface object of pygame }-----###
+                    # Saving - Text
                     screen.fill((0,0,0))
                     render = text.render("Saving",False,(255,255,255))
                     screen.blit(render,(0,0))
@@ -137,6 +138,7 @@ while not done:
                             break
                         else:
                             filename = filename + ".jpg"
+                        # Change this to use Pillow!
                         save = background
                         save.blit(sticker,pos)
                         pygame.image.save(save,filename)

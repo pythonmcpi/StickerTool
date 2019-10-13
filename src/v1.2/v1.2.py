@@ -93,6 +93,8 @@ ctrl = False
 alt = False
 background = None
 sticker = None
+backgroundLoaded = False
+stickerLoaded = False
 placed = False
 
 # Tk init
@@ -125,32 +127,50 @@ while not done:
             elif event.key == pygame.K_s:
                 #####----------[ Need to update and also enable saving using a menu ]----------#####
                 if ctrl:
-                    ###-----{ Change the saving to use Pillow instead of the unreliable surface object of pygame }-----###
-                    # Saving - Text
-                    screen.fill((0,0,0))
-                    render = text.render("Saving",False,(255,255,255))
-                    screen.blit(render,(0,0))
-                    pygame.display.update()
-                    time.sleep(0.5)
-                    while True:
-                        # Saves only with PNG files!
-                        savefilename = filedialog.asksaveasfilename(initialdir = "%CD%",title = "Save your edited picture",filetypes = (("png files","*.png"),("all files","*.*")))
-                        if savefilename == "":
+                    if not backgroundLoaded:
+                        screen.fill((0,0,0))
+                        render = text.render("You need to select an image to paste a sticker on first!",False,(255,255,255))
+                        screen.blit(render,(0,0))
+                        pygame.display.update()
+                        time.sleep(1)
+                    elif not stickerLoaded:
+                        screen.fill((0,0,0))
+                        render = text.render("You need to select and place a sticker first!",False,(255,255,255))
+                        screen.blit(render,(0,0))
+                        pygame.display.update()
+                        time.sleep(1)
+                    elif not placed:
+                        screen.fill((0,0,0))
+                        render = text.render("You need to place the sticker first!",False,(255,255,255))
+                        screen.blit(render,(0,0))
+                        pygame.display.update()
+                        time.sleep(1)
+                    else:
+                        # Saving - Text
+                        screen.fill((0,0,0))
+                        render = text.render("Saving",False,(255,255,255))
+                        screen.blit(render,(0,0))
+                        pygame.display.update()
+                        time.sleep(0.5)
+                        while True:
+                            # Saves only with PNG files!
+                            savefilename = filedialog.asksaveasfilename(initialdir = "%CD%",title = "Save your edited picture",filetypes = (("png files","*.png"),("all files","*.*")))
+                            if savefilename == "":
+                                break
+                            else:
+                                savefilename = savefilename + ".PNG"
+                            # Saving - Now uses Pillow
+                            '''
+                            save = background
+                            save.blit(sticker,pos)
+                            pygame.image.save(save,savefilename)
+                            del save
+                            '''
+                            save = Image.open(filename)
+                            stickerimg = Image.open(stickerfilename)
+                            save.paste(stickerimg,pos,stickerimg)
+                            save.save(savefilename,"PNG")
                             break
-                        else:
-                            savefilename = savefilename + ".PNG"
-                        # Saving - Now uses Pillow
-                        '''
-                        save = background
-                        save.blit(sticker,pos)
-                        pygame.image.save(save,savefilename)
-                        del save
-                        '''
-                        save = Image.open(filename)
-                        stickerimg = Image.open(stickerfilename)
-                        save.paste(stickerimg,pos,stickerimg)
-                        save.save(savefilename,"PNG")
-                        break
             elif event.key == pygame.K_o:
                 #####----------[ Need to update and also enable opening using a menu ]----------#####
                 if ctrl:
@@ -167,6 +187,7 @@ while not done:
                     screen.blit(render,(250,250))
                     pygame.display.update()
                     time.sleep(1)
+                    backgroundLoaded = True
             elif event.key == pygame.K_i:
                 #####----------[ Need to update and also enable choosing using a menu ]----------#####
                 if ctrl:
@@ -180,6 +201,7 @@ while not done:
                     sticker = pygame.image.load(stickerfilename)
                     sticker = aspect_scale(sticker,stickersize)
                     placed = False
+                    stickerLoaded = True
             elif event.key == pygame.K_h:
                 messagebox.showinfo("Help","Welcome to help. This feature not implemented yet.")
                 # ===============================================================================[Feature]==============================================================================================
@@ -209,7 +231,10 @@ while not done:
                 #####----------[ Need to be able to use the menu for this as well ]----------#####
                 # Unplaces the sticker
                 placed = False
-                del pos
+                try:
+                    del pos
+                except:
+                    pass
             if event.button == 4: # Scroll Up
                 #####----------[ Need to be able to do this in the menu ]----------#####
                 # Makes the sticker bigger

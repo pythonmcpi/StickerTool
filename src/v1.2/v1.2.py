@@ -4,6 +4,8 @@
 # sys                             -     sys
 # time                            -     time
 # tkinter                         -     tkinter, filedialog, messagebox
+#
+# Pillow (PIL)                    -     RGBA transparency
 # End list
 import pygame
 from pygame.locals import *
@@ -12,8 +14,9 @@ import time
 import tkinter
 from tkinter import filedialog
 from tkinter import messagebox
+from PIL import Image
 
-# Image scaling system to avoid distortion
+# ===[ Image scaling system to avoid distortion ]=== #
 """
 aspect_scale.py - Scaling surfaces keeping their aspect ratio
 Raiser, Frank - Sep 6, 2k++
@@ -66,7 +69,7 @@ def aspect_scale(img,b):
         return pygame.transform.scale(img, (int(sx),int(sy)))
     else:
         return aspect_scale(img,(100,100))
-# End code snippet
+# ==========[ End code snippet ]=========== #
 
 # initialize program engine
 pygame.init()

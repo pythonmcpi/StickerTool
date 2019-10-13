@@ -1,0 +1,11 @@
+v1.0.py:                           - dependcy pygame sys time tkinter
+	-basic sticker stick/unstick
+	-sticker zoom
+	-save/load image
+	-save reminder
+v1.1.py (Planeed changes):         - Dependency add module Pillow(Photo processing)
+	-developer mode(maybe 1.2)
+	-help dialog(maybe1.2)
+	-two modes, switch with ctrl+f (Working)
+	-new mode, sticker modification mode for removing background tools
+	-more user friendly

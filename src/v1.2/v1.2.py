@@ -139,7 +139,7 @@ while not done:
                             break
                         else:
                             savefilename = savefilename + ".PNG"
-                        # Change this to use Pillow!
+                        # Saving - Now uses Pillow
                         '''
                         save = background
                         save.blit(sticker,pos)

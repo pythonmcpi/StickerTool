@@ -6,6 +6,12 @@
 # tkinter                         -     tkinter, filedialog, messagebox
 #
 # Pillow (PIL)                    -     RGBA transparency
+<<<<<<< Updated upstream
+=======
+#
+# pygameMenu                      -     Menus
+#
+>>>>>>> Stashed changes
 # End list
 import pygame
 from pygame.locals import *
@@ -15,6 +21,10 @@ import tkinter
 from tkinter import filedialog
 from tkinter import messagebox
 from PIL import Image
+<<<<<<< Updated upstream
+=======
+import pygameMenu
+>>>>>>> Stashed changes
 
 # ===[ Image scaling system to avoid distortion ]=== #
 """
@@ -96,23 +106,90 @@ sticker = None
 backgroundLoaded = False
 stickerLoaded = False
 placed = False
+<<<<<<< Updated upstream
+=======
+modified = False
+>>>>>>> Stashed changes
 
 # Tk init
 root = tkinter.Tk()
 root.withdraw()
 
+<<<<<<< Updated upstream
 messagebox.showinfo("Welcome","Welcome to Image Processor, made by PythonPro.")
+=======
+def save():
+    if not backgroundLoaded:
+        screen.fill((0,0,0))
+        render = text.render("You need to select an image to paste a sticker on first!",False,(255,255,255))
+        screen.blit(render,(0,0))
+        pygame.display.update()
+        time.sleep(1)
+    elif not stickerLoaded:
+        screen.fill((0,0,0))
+        render = text.render("You need to select and place a sticker first!",False,(255,255,255))
+        screen.blit(render,(0,0))
+        pygame.display.update()
+        time.sleep(1)
+    elif not placed:
+        screen.fill((0,0,0))
+        render = text.render("You need to place the sticker first!",False,(255,255,255))
+        screen.blit(render,(0,0))
+        pygame.display.update()
+        time.sleep(1)
+    else:
+        # Saving - Text
+        screen.fill((0,0,0))
+        render = text.render("Saving",False,(255,255,255))
+        screen.blit(render,(0,0))
+        pygame.display.update()
+        time.sleep(0.5)
+        while True:
+            # Saves only with PNG files!
+            savefilename = filedialog.asksaveasfilename(initialdir = "%CD%",title = "Save your edited picture",filetypes = (("png files","*.png"),("all files","*.*")))
+            if savefilename == "":
+                break
+            else:
+                savefilename = savefilename + ".PNG"
+            # Saving - Now uses Pillow
+            '''
+            save = background
+            save.blit(sticker,pos)
+            pygame.image.save(save,savefilename)
+            del save
+            '''
+            save = Image.open(filename)
+            stickerimg = Image.open(stickerfilename)
+            save.paste(stickerimg,pos,stickerimg)
+            save.save(savefilename,"PNG")
+            global modified
+            modified = False
+
+>>>>>>> Stashed changes
 while not done:
     # write event handlers here
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             #####----------[ Add the EDIT variable ]----------#####
+<<<<<<< Updated upstream
             if messagebox.askokcancel("Exit","Do you want to quit Image Processor?"):
                 if messagebox.askyesno("Save","Do you want to save?"):
                     messagebox.showinfo("Save","Hit ctrl+s to save, then exit by hitting no save.")
                 else:
                     messagebox.showinfo("Thank you","Thank you for using Image Processor.")
                     done = True
+=======
+            if modified:
+                if messagebox.askokcancel("Exit","Do you want to quit Image Processor?"):
+                    if messagebox.askyesno("Save","Do you want to save?"):
+                        save()
+                    else:
+                        messagebox.showinfo("Thank you","Thank you for using Image Processor.")
+                        done = True
+            else:
+                messagebox.showinfo("Thank you","Thank you for using Image Processor.")
+                done = True
+>>>>>>> Stashed changes
         elif event.type == pygame.VIDEORESIZE:
             # WindowResize event: Resizes the window to desired size
             size = [event.w,event.h]
@@ -127,6 +204,7 @@ while not done:
             elif event.key == pygame.K_s:
                 #####----------[ Need to update and also enable saving using a menu ]----------#####
                 if ctrl:
+<<<<<<< Updated upstream
                     if not backgroundLoaded:
                         screen.fill((0,0,0))
                         render = text.render("You need to select an image to paste a sticker on first!",False,(255,255,255))
@@ -171,6 +249,10 @@ while not done:
                             save.paste(stickerimg,pos,stickerimg)
                             save.save(savefilename,"PNG")
                             break
+=======
+                    save()
+                    break
+>>>>>>> Stashed changes
             elif event.key == pygame.K_o:
                 #####----------[ Need to update and also enable opening using a menu ]----------#####
                 if ctrl:
@@ -188,6 +270,10 @@ while not done:
                     pygame.display.update()
                     time.sleep(1)
                     backgroundLoaded = True
+<<<<<<< Updated upstream
+=======
+                    modified = True
+>>>>>>> Stashed changes
             elif event.key == pygame.K_i:
                 #####----------[ Need to update and also enable choosing using a menu ]----------#####
                 if ctrl:
@@ -202,6 +288,10 @@ while not done:
                     sticker = aspect_scale(sticker,stickersize)
                     placed = False
                     stickerLoaded = True
+<<<<<<< Updated upstream
+=======
+                    modified = True
+>>>>>>> Stashed changes
             elif event.key == pygame.K_h:
                 messagebox.showinfo("Help","Welcome to help. This feature not implemented yet.")
                 # ===============================================================================[Feature]==============================================================================================
@@ -216,6 +306,10 @@ while not done:
             # Update the mouse location
             mouse_pos = pygame.mouse.get_pos()
         elif event.type == pygame.MOUSEBUTTONDOWN:
+<<<<<<< Updated upstream
+=======
+            modified = True
+>>>>>>> Stashed changes
             if event.button == 1: # Left Click
                 #####----------[ Need to allow for clicking in the menu, add x,y coord check ]----------#####
                 # Places the sticker

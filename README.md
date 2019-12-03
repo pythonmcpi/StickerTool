@@ -1,6 +1,16 @@
 # StickerTool
 A simple sticker tool.
 
+## Warning!
+There is currently a
+major bug in the
+development version
+that breaks the tool.
+(The bug blits the
+sticker in the wrong
+place, so the tool
+doesn't work
+
 This sticker tool was made by PythonMCpi. It was designed for private use, but that awesome dude decided to make this open-source.
 
 History:
